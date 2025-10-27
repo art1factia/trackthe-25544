@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Sketch</title>
+
+    <link rel="stylesheet" type="text/css" href="style.css" />
+
+    <script src="libraries/p5.min.js"></script>
+    <script src="libraries/p5.sound.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "itl";
+        src: url("./CormorantGaramond-Italic-VariableFont_wght.ttf");
+      }
+      @font-face {
+        font-family: "jp";
+        src: url("./NotoSansJP-VariableFont_wght.ttf");
+      }
+      @font-face {
+        font-family: "nm";
+        src: url("./Orbit-Regular.ttf");
+      }
+    </style>
+  </head>
+
+  <body>
+    <div
+      style="position: absolute; width: 100vw; background-color: transparent"
+    >
+      <div
+        style="
+          background-color: transparent;
+          color: red;
+          font-size: 4rem;
+          line-height: 3rem;
+          font-family: nm;
+          text-align: end;
+        "
+      >
+        TRACKthe#25544
+      </div>
+      <div
+        style="
+          font-family: nm;
+          font-size: 4.5rem;
+          text-align: end;
+          color: black;
+          display: flex;
+          justify-content: end;
+        "
+      >
+        <!-- <div
+          style="
+            line-height: 4rem;
+            padding: 0px 10px;
+            width: auto;
+            background-color: red;
+          "
+        >
+          Where<span style="font-family: itl; font-size: 5rem"
+            >InternationalSpaceStation</span
+          >at
+        </div> -->
+      </div>
+      <div style="display: flex; justify-content: end">
+        <div
+          style="
+            font-size: 8rem;
+            font-weight: 800;
+            line-height: 6rem;
+            font-family: jp;
+            color: red;
+            text-align: right;
+          "
+        >
+          国際宇宙<span
+            style="font-size: 6rem; line-height: 0rem; text-align: right"
+            >ステーション</span
+          >
+        </div>
+      </div>
+      <div
+        style="
+          font-size: 2rem;
+          font-weight: 800;
+          line-height: 6rem;
+          font-family: nm;
+          color: red;
+          text-align: right;
+        "
+      >
+        PRESS R KEY TO CHECK POSITION OF SATELLITE
+      </div>
+    </div>
+
+    <script src="sketch.js"></script>
+    <script src="api.js"></script>
+  </body>
+</html>
