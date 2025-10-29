@@ -197,6 +197,7 @@ async function draw() {
   background(10);
   push();
 
+  
   translate(-200, 300, 100);
   rotateX(PI / 12);
   rotateZ(PI / 6);
@@ -241,6 +242,7 @@ async function draw() {
 
   rotateX(-0.5);
   rotateY(rot);
+  
 
   // fill(100);
   // for (let i = 0; i < 360; i += 10) {
@@ -328,7 +330,7 @@ async function draw() {
       text(`${Number(sat_lat).toFixed(4)} ${Number(sat_lng).toFixed(4)}`, 0, 0);
     }
     // fill(255);
-    text(`lat_grad: ${lat_grad[j]} lng_grad: ${lng_grad[j]}`, 0, 0);
+    // text(`lat_grad: ${lat_grad[j]} lng_grad: ${lng_grad[j]}`, 0, 0);
     // noFill();
     pop();
   }
