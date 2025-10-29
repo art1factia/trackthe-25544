@@ -16,6 +16,34 @@ let rot = 0;
 let limit = 10;
 let currentSec = 0;
 let lerpFlag = 0;
+let lat_grad = [
+  true,
+  true,
+  true,
+  true,
+  true,
+  true,
+  true,
+  true,
+  true,
+  true,
+  true,
+  true,
+];
+let lng_grad = [
+  true,
+  true,
+  true,
+  true,
+  true,
+  true,
+  true,
+  true,
+  true,
+  true,
+  true,
+  true,
+];
 let sat_buf = [
   {
     latitude: 0,
@@ -154,27 +182,28 @@ function preload() {
 
 function setup() {
   createCanvas(windowWidth, windowHeight, WEBGL);
-  obs_lng_slid = createSlider(0, 360);
-  obs_lat_slid = createSlider(-90, 90);
-  obs_lng_slid.position(10, 10);
-  obs_lat_slid.position(10, 30);
+  // obs_lng_slid = createSlider(0, 360);
+  // obs_lat_slid = createSlider(-90, 90);
+  // obs_lng_slid.position(10, 10);
+  // obs_lat_slid.position(10, 30);
 
   textFont(font);
 }
 async function draw() {
-  obs_lat = obs_lat_slid.value();
-  obs_lng = obs_lng_slid.value();
+  // obs_lat = obs_lat_slid.value();
+  // obs_lng = obs_lng_slid.value();
 
   // console.log("obs_lat:", obs_lat, "obs_lng:", obs_lng);
   background(10);
   push();
 
-  translate(-200,300,100)
+  translate(-200, 300, 100);
   rotateX(PI / 12);
-  rotateZ(PI/6)
-  rotateY(PI / 12* (1 + mouseX / width));
-  stroke(255, 255, 255,30);
-    scale(10);
+  rotateZ(PI / 6);
+  rotateY((PI / 12) * (1 + mouseX / width));
+  stroke(255, 255, 255, 30);
+  scale(10);
+  // noFill();
   model(shape);
   pop();
   // orbitControl();
@@ -190,8 +219,8 @@ async function draw() {
   textSize(20);
   push();
 
-  text(obs_lng, -width / 2 + 150, -height / 2 + 25);
-  text(obs_lat, -width / 2 + 150, -height / 2 + 45);
+  // text(obs_lng, -width / 2 + 150, -height / 2 + 25);
+  // text(obs_lat, -width / 2 + 150, -height / 2 + 45);
   // textSize(24);
   // translate(r,0,0);
   text("0", r + 40, 0);
@@ -199,7 +228,7 @@ async function draw() {
 
   push();
   // translate(0,-r,0);
-  text("90N", 0, -r -40);
+  text("90N", 0, -r - 40);
   pop();
 
   push();
@@ -229,14 +258,14 @@ async function draw() {
   sphere(r);
 
   noStroke();
-  let x = r * cos(radians(obs_lat)) * sin(radians(obs_lng));
-  let y = r * sin(radians(obs_lat));
-  let z = r * cos(radians(obs_lat)) * cos(radians(obs_lng));
-  push();
-  translate(x, y, z);
-  fill(50);
-  box(10);
-  pop();
+  // let x = r * cos(radians(obs_lat)) * sin(radians(obs_lng));
+  // let y = r * sin(radians(obs_lat));
+  // let z = r * cos(radians(obs_lat)) * cos(radians(obs_lng));
+  // push();
+  // translate(x, y, z);
+  // fill(50);
+  // box(10);
+  // pop();
   rot += 0.005;
   // console.log("sat_buf:", sat_buf);
   // console.log("new_sat_vuf:", new_sat_buf);
@@ -251,11 +280,22 @@ async function draw() {
           new_sat_buf[j].latitude,
           (cur - lerp_start) / (lerp_end - lerp_start)
         );
+
+    const inverse = abs(new_sat_buf[j].longitude - sat_buf[j].longitude) > 180 ? true : false;
+    let s = sat_buf[j].longitude
+    let e = new_sat_buf[j].longitude
+    if (inverse) {
+      if (s > e) {
+        e += 360
+      } else {
+        s += 360
+      }
+    }
     const sat_lng = lerpFlag
       ? new_sat_buf[j].longitude
       : lerp(
-          sat_buf[j].longitude,
-          new_sat_buf[j].longitude,
+          s,
+          e,
           (cur - lerp_start) / (lerp_end - lerp_start)
         );
     let sat_alt = lerpFlag
@@ -265,7 +305,7 @@ async function draw() {
           new_sat_buf[j].altitude,
           (cur - lerp_start) / (lerp_end - lerp_start)
         );
-    sat_alt *= r /1280;
+    sat_alt *= r / 1280;
     const sat_vel = lerp(
       sat_buf[j].velocity,
       new_sat_buf[j].velocity,
@@ -280,19 +320,16 @@ async function draw() {
     translate(sx, sy, sz);
     fill(255, 0, 0, 200 * (j / sat_buf.length));
     sphere(10);
+    rotateY(-rot);
     if (j == sat_buf.length - 1) {
-      rotateY(-rot);
       fill(255, 50, 50);
-      console.log(currentSec)
-      text(`${new Date(currentSec*1000)}`, 0, -30)
-      text(
-        `${Number(sat_lat - 360).toFixed(4)} ${Number(sat_lng - 360).toFixed(
-          4
-        )}`,
-        0,
-        0
-      );
+      console.log(currentSec);
+      text(`${new Date(currentSec * 1000)}`, 0, -30);
+      text(`${Number(sat_lat).toFixed(4)} ${Number(sat_lng).toFixed(4)}`, 0, 0);
     }
+    // fill(255);
+    text(`lat_grad: ${lat_grad[j]} lng_grad: ${lng_grad[j]}`, 0, 0);
+    // noFill();
     pop();
   }
   //   // if (sat_buf.length >1) sat_buf.splice(0,1)
@@ -310,9 +347,14 @@ async function keyPressed() {
       currentSec += 150;
     }
     const res = await fetchData({ id: 25544, timestamplist });
+
     for (let i = 0; i < limit; i++) {
       res[i].latitude += 360;
       res[i].longitude += 360;
+      lat_grad[i] =
+        res[i].latitude - new_sat_buf[i].latitude > 0 ? true : false;
+      lng_grad[i] =
+        res[i].longitude - new_sat_buf[i].longitude > 0 ? true : false;
     }
     lerp_start = millis();
     lerp_end = lerp_start + 3000;
